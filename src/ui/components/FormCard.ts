@@ -1,5 +1,6 @@
-import type { Validation } from '../utils/validators';
-import { h } from './dom';
+import type { Validation } from '../../utils/validators';
+import { h } from '../dom';
+import { createCard } from './Card';
 
 export interface FieldConfig<K extends string> {
   name: K;
@@ -13,15 +14,6 @@ export interface FormConfig<K extends string> {
   fields: FieldConfig<K>[];
   validate(values: Record<K, string>): Validation.Errors<K>;
   onSubmit(values: Record<K, string>): void;
-}
-
-export function createCard(title: string, content: Node[]): HTMLElement {
-  return h('section', { className: 'card shadow-sm mb-3' }, [
-    h('div', { className: 'card-body' }, [
-      h('h2', { className: 'h4 fw-bold mb-3', text: title }),
-      ...content,
-    ]),
-  ]);
 }
 
 /** Картка з формою: показує під полями повідомлення про помилки валідації. */
