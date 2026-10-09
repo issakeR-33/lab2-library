@@ -1,7 +1,7 @@
 import { Book } from '../models/Book';
 import { User } from '../models/User';
 import type { BookData, Id, UserData } from '../types';
-import { generateId } from '../utils/id';
+import { generateId } from '../utils/idGenerator';
 import { Library } from './Library';
 import type { Storage } from './Storage';
 

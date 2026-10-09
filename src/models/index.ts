@@ -1,4 +1,4 @@
 export { Book } from './Book';
-export type { IBook } from './Book';
 export { User } from './User';
-export type { IUser } from './User';
+export type { IBook } from './interfaces/IBook';
+export type { IUser } from './interfaces/IUser';

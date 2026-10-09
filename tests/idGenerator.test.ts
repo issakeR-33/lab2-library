@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { generateId } from '../src/utils/id';
+import { generateId } from '../src/utils/idGenerator';
 
 describe('generateId', () => {
   it('returns unique, growing ids even when called many times in one millisecond', () => {
