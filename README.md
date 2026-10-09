@@ -28,29 +28,29 @@ npm run format     # Prettier
 
 ## Вимоги завдання і де вони реалізовані
 
-| Вимога                                              | Де реалізовано                                                                     |
-| --------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Лише JS/TS, порожній `div#app` в `index.html`       | `public/index.html`, DOM будується функцією `h()` у `src/ui/dom.ts`                |
-| Строга типізація                                    | `tsconfig.json` (`strict`, `noUncheckedIndexedAccess`), типи в `src/types/`        |
-| Класи й інтерфейси книг                             | `src/models/Book.ts` (`IBook`, `Book`)                                             |
-| Класи й інтерфейси користувачів                     | `src/models/User.ts` (`IUser`, `User`)                                             |
-| Generic `Library<T>`: додавання, видалення, пошук   | `src/services/Library.ts`                                                          |
-| Клас `Storage` для LocalStorage                     | `src/services/Storage.ts` (`save`, `load`, `remove`, `clear`)                      |
-| Модулі й namespace                                  | шари `models`, `services`, `utils`, `ui`; `Validation` у `src/utils/validators.ts` |
-| Позичання й повернення змінюють стан книги          | `LibraryService.borrowBook` / `returnBook`, поле `borrowedBy`                      |
-| Валідація: обов'язкові поля, ID цифри, рік за regex | `Validation` (`validateBook`, `validateUser`, `validateUserId`, `isValidYear`)     |
-| Сповіщення без `alert`                              | `src/ui/Modal.ts` (`NotificationService`, модальні вікна Bootstrap)                |
-| Ліміт 3 книги на користувача + модальне вікно       | `MAX_BORROWED_BOOKS` у `LibraryService`, повідомлення в `src/ui/App.ts`            |
-| Збереження в LocalStorage між перезавантаженнями    | `LibraryService.persist()` / `restore()`                                           |
-| ESLint і Prettier, 0 попереджень                    | `eslint.config.mjs`, `.prettierrc`, `npm run lint`                                 |
-| Mocha + Chai: `Library`, `Validation`               | `tests/library.test.ts`, `tests/validation.test.ts` (+ ще три набори)              |
-| Husky pre-commit                                    | `.husky/pre-commit`: `npm run lint` і `npm test`                                   |
-| Пошук за автором або назвою                         | `LibraryService.searchBooks`, поле пошуку в `src/ui/App.ts`                        |
-| Видалення книг і користувачів                       | кнопки «Видалити» в `src/ui/lists.ts`                                              |
-| Пагінація по 5                                      | `src/utils/pagination.ts`, `src/ui/Pagination.ts`                                  |
-| Webpack і окрема гілка Vite                         | `webpack.config.js` (main), `vite.config.ts` (`vite-migration`)                    |
-| Деплой на GitHub Pages                              | `npm run deploy` (gh-pages)                                                        |
-| Порівняння webpack і Vite                           | розділ нижче                                                                       |
+| Вимога                                              | Де реалізовано                                                                                         |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Лише JS/TS, порожній `div#app` в `index.html`       | `index.html`, DOM будується функцією `h()` у `src/ui/dom.ts`                                           |
+| Строга типізація                                    | `tsconfig.json` (`strict`, `noUncheckedIndexedAccess`), типи в `src/types/`                            |
+| Класи й інтерфейси книг                             | `src/models/Book.ts`, `src/models/interfaces/IBook.ts`                                                 |
+| Класи й інтерфейси користувачів                     | `src/models/User.ts`, `src/models/interfaces/IUser.ts`                                                 |
+| Generic `Library<T>`: додавання, видалення, пошук   | `src/services/Library.ts`                                                                              |
+| Клас `Storage` для LocalStorage                     | `src/services/Storage.ts` (`save`, `load`, `remove`, `clear`)                                          |
+| Модулі й namespace                                  | шари `models`, `services`, `utils`, `ui`; `Validation` у `src/utils/validators.ts`                     |
+| Позичання й повернення змінюють стан книги          | `LibraryService.borrowBook` / `returnBook`, поле `borrowedBy`                                          |
+| Валідація: обов'язкові поля, ID цифри, рік за regex | `Validation` (`validateBook`, `validateUser`, `validateUserId`, `isValidYear`)                         |
+| Сповіщення без `alert`                              | `src/services/NotificationService.ts` (черга), `src/ui/components/Modal.ts` (модальні вікна Bootstrap) |
+| Ліміт 3 книги на користувача + модальне вікно       | `MAX_BORROWED_BOOKS` у `LibraryService`, повідомлення в `src/ui/render.ts`                             |
+| Збереження в LocalStorage між перезавантаженнями    | `LibraryService.persist()` / `restore()`                                                               |
+| ESLint і Prettier, 0 попереджень                    | `eslint.config.mjs`, `.prettierrc`, `npm run lint`                                                     |
+| Mocha + Chai: `Library`, `Validation`               | `tests/library.test.ts`, `tests/validation.test.ts` (+ ще чотири набори)                               |
+| Husky pre-commit                                    | `.husky/pre-commit`: `npm run lint` і `npm test`                                                       |
+| Пошук за автором або назвою                         | `LibraryService.searchBooks`, поле пошуку в `src/ui/render.ts`                                         |
+| Видалення книг і користувачів                       | кнопки «Видалити» в `BookList.ts` і `UserList.ts`                                                      |
+| Пагінація по 5                                      | `src/utils/pagination.ts`, `src/ui/components/Pagination.ts`                                           |
+| Webpack і окрема гілка Vite                         | `webpack.config.js` (main), `vite.config.ts` (`vite-migration`)                                        |
+| Деплой на GitHub Pages                              | `npm run deploy` (gh-pages)                                                                            |
+| Порівняння webpack і Vite                           | розділ нижче                                                                                           |
 
 ## Можливості
 
@@ -71,20 +71,37 @@ npm run format     # Prettier
 
 ```
 src/
-  types/       спільні типи й інтерфейси (Id, Identifiable, BookData, UserData)
-  models/      Book, User: лише дані та інтерфейси, без UI і сховища
-  services/    Library<T> (generic), LibraryService (позичання/повернення/ліміт), Storage
-  utils/       validators.ts (namespace Validation), pagination.ts, id.ts
-  ui/          єдиний шар, що працює з DOM: форми, списки, модальні вікна, App
-  styles/      main.css
-tests/         Mocha + Chai (окремо від src/)
-docs/          скріншоти
-public/        index.html (з порожнім #app)
-.husky/        pre-commit хук
-.github/       CI (lint, typecheck, тести, збірка)
+  types/            спільні типи (Id, Identifiable, BookData, UserData)
+  models/           дані без UI і сховища
+    interfaces/       IBook.ts, IUser.ts
+    Book.ts, User.ts
+  services/         бізнес-логіка, без DOM
+    Library.ts          generic-клас Library<T>
+    LibraryService.ts   позичання, повернення, ліміт, пошук, збереження
+    Storage.ts          робота з LocalStorage
+    NotificationService.ts  черга сповіщень
+  utils/            чисті допоміжні функції
+    validators.ts       namespace Validation
+    idGenerator.ts, pagination.ts
+  ui/               єдиний шар, що працює з DOM
+    components/         BookForm, UserForm, FormCard, BookList, UserList,
+                        Pagination, Card, Modal (презентер сповіщень), helpers
+    dom.ts              створення елементів
+    render.ts           кореневе подання: монтування й оновлення DOM
+  styles/main.scss  власні стилі поверх Bootstrap
+  index.ts          точка входу, збирає все разом
+tests/              Mocha + Chai (окремо від src/)
+public/             favicon.ico
+docs/               скріншоти
+index.html          лише <div id="app"></div>
+.husky/pre-commit   хук: lint і тести
+.github/workflows/  CI
+webpack.config.js   збірка (main); vite.config.ts лежить у гілці vite-migration
+eslint.config.mjs   ESLint 9 використовує flat-конфіг замість .eslintrc.json
 ```
 
 Залежності йдуть в один бік: `ui` → `services` → `models`. DOM використовує тільки шар `ui`.
+`NotificationService` не знає про DOM: він ставить сповіщення в чергу, а модальні вікна малює презентер із `ui/components/Modal.ts`.
 
 Ключові рішення:
 
@@ -97,7 +114,7 @@ public/        index.html (з порожнім #app)
 ## Якість коду
 
 - **ESLint** (typescript-eslint) + **Prettier**: `npm run lint` проходить із `--max-warnings 0`.
-- **Mocha + Chai**: 44 тести для `Library`, `Validation`, `Storage`, `LibraryService`, пагінації та генерації id.
+- **Mocha + Chai**: 49 тестів для `Library`, `Validation`, `Storage`, `LibraryService`, `NotificationService`, пагінації та генерації id.
 - **Husky**: хук `.husky/pre-commit` запускає `npm run lint` і `npm test`; коміт із помилкою лінтера або тестів блокується.
 - **CI** (GitHub Actions): на кожен push і pull request виконуються `lint`, `typecheck`, тести та збірка.
 - **Git:** feature-гілки (`feature/*`) зливаються в `main` через `--no-ff`, повідомлення за Conventional Commits.

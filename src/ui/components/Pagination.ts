@@ -1,4 +1,4 @@
-import { h } from './dom';
+import { h } from '../dom';
 
 /** Навігація за сторінками; для однієї сторінки нічого не показує. */
 export function renderPagination(

@@ -2,14 +2,17 @@ import type { Book } from '../models/Book';
 import type { User } from '../models/User';
 import type { LibraryService } from '../services/LibraryService';
 import { MAX_BORROWED_BOOKS } from '../services/LibraryService';
+import type { NotificationService } from '../services/NotificationService';
 import { paginate } from '../utils/pagination';
-import { Validation } from '../utils/validators';
+import { createBookForm } from './components/BookForm';
+import { renderBookList } from './components/BookList';
+import { createCard } from './components/Card';
+import { renderPagination } from './components/Pagination';
+import { createUserForm } from './components/UserForm';
+import { renderUserList } from './components/UserList';
 import { h } from './dom';
-import { createCard, createFormCard } from './Form';
-import { renderBookList, renderUserList } from './lists';
-import type { NotificationService } from './Modal';
-import { renderPagination } from './Pagination';
 
+/** Кореневе подання: збирає сторінку з компонентів і перемальовує списки після змін. */
 export class App {
   private readonly root: HTMLElement;
   private readonly service: LibraryService;
@@ -31,53 +34,16 @@ export class App {
   }
 
   mount(): void {
+    const refresh = (): void => this.refresh();
+
     this.root.replaceChildren(
       h('h1', { className: 'text-center fw-bold my-3', text: 'Система Управління Бібліотекою' }),
-      this.createBookForm(),
-      this.createUserForm(),
+      createBookForm(this.service, refresh),
+      createUserForm(this.service, refresh),
       this.createBooksCard(),
-      this.createUsersCard(),
+      createCard('Список Користувачів', [this.userList, this.userPagination]),
     );
     this.refresh();
-  }
-
-  private createBookForm(): HTMLElement {
-    return createFormCard({
-      title: 'Додати Книгу',
-      submitLabel: 'Додати Книгу',
-      fields: [
-        { name: 'title', placeholder: 'Назва книги' },
-        { name: 'author', placeholder: 'Автор' },
-        { name: 'year', placeholder: 'Рік видання', inputMode: 'numeric' },
-      ],
-      validate: (values) => Validation.validateBook(values).errors,
-      onSubmit: (values) => {
-        this.service.addBook({ ...values, year: Number(values.year) });
-        this.refresh();
-      },
-    });
-  }
-
-  private createUserForm(): HTMLElement {
-    return createFormCard({
-      title: 'Додати Користувача',
-      submitLabel: 'Додати Користувача',
-      fields: [
-        { name: 'name', placeholder: "Ім'я" },
-        { name: 'email', placeholder: 'Email', inputMode: 'email' },
-      ],
-      validate: (values) => {
-        const { errors } = Validation.validateUser(values);
-        if (!errors.email && this.service.isEmailTaken(values.email)) {
-          errors.email = Validation.MESSAGES.emailTaken;
-        }
-        return errors;
-      },
-      onSubmit: (values) => {
-        this.service.addUser(values);
-        this.refresh();
-      },
-    });
   }
 
   private createBooksCard(): HTMLElement {
@@ -92,10 +58,6 @@ export class App {
     });
 
     return createCard('Список Книг', [search, this.bookList, this.bookPagination]);
-  }
-
-  private createUsersCard(): HTMLElement {
-    return createCard('Список Користувачів', [this.userList, this.userPagination]);
   }
 
   private refresh(): void {

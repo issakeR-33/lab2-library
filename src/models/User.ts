@@ -1,10 +1,5 @@
-import type { Id, Identifiable, UserData } from '../types';
-
-export interface IUser extends Identifiable {
-  readonly name: string;
-  readonly email: string;
-  describe(): string;
-}
+import type { Id, UserData } from '../types';
+import type { IUser } from './interfaces/IUser';
 
 export class User implements IUser {
   private readonly _id: Id;

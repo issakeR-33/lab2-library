@@ -1,13 +1,5 @@
-import type { BookData, Id, Identifiable } from '../types';
-
-export interface IBook extends Identifiable {
-  readonly title: string;
-  readonly author: string;
-  readonly year: number;
-  readonly borrowedBy: Id | null;
-  readonly isBorrowed: boolean;
-  describe(): string;
-}
+import type { BookData, Id } from '../types';
+import type { IBook } from './interfaces/IBook';
 
 export class Book implements IBook {
   private readonly _id: Id;
