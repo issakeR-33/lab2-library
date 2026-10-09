@@ -30,7 +30,7 @@ npm run format     # Prettier
 
 | Вимога                                              | Де реалізовано                                                                     |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| Лише JS/TS, порожній `div#app` в `index.html`       | `public/index.html`, DOM будується функцією `h()` у `src/ui/dom.ts`                |
+| Лише JS/TS, порожній `div#app` в `index.html`       | `index.html`, DOM будується функцією `h()` у `src/ui/dom.ts`                |
 | Строга типізація                                    | `tsconfig.json` (`strict`, `noUncheckedIndexedAccess`), типи в `src/types/`        |
 | Класи й інтерфейси книг                             | `src/models/Book.ts` (`IBook`, `Book`)                                             |
 | Класи й інтерфейси користувачів                     | `src/models/User.ts` (`IUser`, `User`)                                             |

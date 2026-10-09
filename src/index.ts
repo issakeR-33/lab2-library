@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './styles/main.css';
+import './styles/main.scss';
 
 import { LibraryService } from './services/LibraryService';
 import { NotificationService } from './services/NotificationService';
