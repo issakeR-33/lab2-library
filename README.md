@@ -5,6 +5,11 @@
 
 Увесь інтерфейс будується з коду (TypeScript + DOM API): `index.html` містить лише порожній `<div id="app"></div>`.
 
+## Демо
+
+- webpack: https://issaker-33.github.io/lab2-library/webpack/
+- Vite: https://issaker-33.github.io/lab2-library/vite/
+
 ![Головний екран](docs/main-screen.png)
 
 |                                         |                                           |
